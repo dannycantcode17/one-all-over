@@ -1,0 +1,552 @@
+:root {
+  --accent: #ffb27d;
+  --ink: #f4f4f5;
+  --glass: rgba(20, 30, 50, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter Tight", system-ui, sans-serif;
+  color: var(--ink);
+  background: #0a1628;
+}
+
+/* Atmospheric stack: gradient under, backdrop image over, content on top */
+.app-root {
+  min-height: 100vh;
+  position: relative;
+}
+
+.app-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 65%, rgba(255, 195, 145, 0.16) 0%, transparent 55%),
+    linear-gradient(180deg, #0a1628 0%, #1a2c4a 40%, #3d4f6b 70%, #b08d7a 100%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+  mask-image: linear-gradient(180deg, transparent 0%, transparent 28%, black 90%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 28%, black 90%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.shell {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 24px 96px;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: riseIn 500ms var(--ease) both;
+}
+
+/* ---------- Header ---------- */
+.eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.hero-title {
+  font-size: clamp(44px, 8vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 10px 0 0;
+}
+
+.hero-sub {
+  font-size: 15px;
+  opacity: 0.55;
+  margin-top: 10px;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+/* ---------- Glass ---------- */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Numpad deck ---------- */
+.deck {
+  display: flex;
+  gap: 32px;
+  padding: 28px;
+  align-items: center;
+}
+
+.padwrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Backlight spilling out from under the keys, as on a real deck */
+.padwrap::before {
+  content: "";
+  position: absolute;
+  inset: 12% -10% -10%;
+  background: radial-gradient(ellipse at 50% 78%, rgba(255, 178, 125, 0.22), transparent 65%);
+  filter: blur(16px);
+  pointer-events: none;
+}
+
+.numpad {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 64px);
+  grid-auto-rows: 64px;
+  gap: 9px;
+}
+
+.npkey {
+  position: relative;
+  border-radius: 11px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.13);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: inherit;
+  padding: 0;
+  transition: transform 250ms var(--ease), border-color 250ms var(--ease),
+    box-shadow 250ms var(--ease), background 250ms var(--ease);
+}
+
+.npkey:hover {
+  transform: translateY(1px);
+  border-color: rgba(255, 178, 125, 0.55);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.38), 0 0 20px rgba(255, 178, 125, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+.npkey.lit {
+  background: linear-gradient(180deg, rgba(255, 178, 125, 0.26), rgba(255, 178, 125, 0.1));
+  border-color: rgba(255, 178, 125, 0.65);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.38), 0 0 26px rgba(255, 178, 125, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.npkey.dead {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.npkey.dead:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+.npkey .cap {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.npkey .hint {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  line-height: 1;
+  max-width: 56px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.npkey.lit .hint {
+  opacity: 0.85;
+}
+
+/* ---------- Readout ---------- */
+.readout {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding-left: 32px;
+}
+
+.readout-keys {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.readout-action {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.readout-notes {
+  font-size: 14px;
+  opacity: 0.55;
+  line-height: 1.5;
+}
+
+.readout-idle {
+  font-size: 15px;
+  opacity: 0.5;
+  line-height: 1.6;
+}
+
+/* ---------- Keycaps (inline, in rows) ---------- */
+.keycap {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  white-space: nowrap;
+}
+
+.keycap.sm {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+.keyplus {
+  opacity: 0.35;
+  font-size: 11px;
+}
+
+/* ---------- Search ---------- */
+.search {
+  padding: 6px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  font-size: 16px;
+  font-family: inherit;
+  padding: 14px 0;
+}
+
+.search input::placeholder {
+  color: rgba(244, 244, 245, 0.35);
+}
+
+.search input:focus {
+  outline: none;
+}
+
+.linklike {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.linklike:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---------- Chips ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 2px 26px;
+  align-items: center;
+}
+
+.chip {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 6px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 300ms var(--ease);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(244, 244, 245, 0.75);
+}
+
+.chip:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.chip.on {
+  background: rgba(255, 178, 125, 0.16);
+  border-color: rgba(255, 178, 125, 0.5);
+  color: var(--accent);
+}
+
+.chip.add {
+  margin-left: auto;
+  font-weight: 600;
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(244, 244, 245, 0.85);
+}
+
+/* ---------- Groups & rows ---------- */
+.group {
+  margin-bottom: 26px;
+}
+
+.group-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+.group-num {
+  position: absolute;
+  right: 10px;
+  top: -16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 54px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+}
+
+.group-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.group-count {
+  font-size: 11px;
+  opacity: 0.35;
+}
+
+.rows {
+  padding: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 18px;
+  border-radius: 12px;
+  transition: background 300ms var(--ease);
+}
+
+.row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.row.flash {
+  background: rgba(255, 178, 125, 0.1);
+}
+
+.row-keys {
+  min-width: 210px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-action {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.row-notes {
+  font-size: 13px;
+  opacity: 0.5;
+  margin-top: 1px;
+}
+
+.row-remove {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 4px;
+  opacity: 0;
+  transition: opacity 300ms var(--ease);
+}
+
+.row:hover .row-remove {
+  opacity: 1;
+}
+
+/* ---------- Add form ---------- */
+.add-form {
+  padding: 24px;
+  margin-bottom: 26px;
+}
+
+.add-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.add-grid input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--ink);
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.add-grid input::placeholder {
+  color: rgba(244, 244, 245, 0.35);
+}
+
+.add-grid input:focus {
+  outline: none;
+  border-color: rgba(255, 178, 125, 0.4);
+}
+
+.btn-accent {
+  margin-top: 14px;
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 178, 125, 0.5);
+  background: rgba(255, 178, 125, 0.14);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 300ms var(--ease);
+}
+
+.btn-accent:hover {
+  background: rgba(255, 178, 125, 0.22);
+}
+
+.form-note {
+  font-size: 12px;
+  opacity: 0.45;
+  margin-left: 14px;
+}
+
+/* ---------- Empty & footer ---------- */
+.empty {
+  padding: 48px;
+  text-align: center;
+  font-size: 15px;
+  opacity: 0.6;
+}
+
+.foot {
+  margin-top: 56px;
+  text-align: center;
+  font-size: 12.5px;
+  opacity: 0.4;
+  line-height: 2;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 760px) {
+  .deck {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .readout {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-left: 0;
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+  .numpad {
+    grid-template-columns: repeat(4, 56px);
+    grid-auto-rows: 56px;
+    gap: 7px;
+  }
+  .row-keys {
+    min-width: 150px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
