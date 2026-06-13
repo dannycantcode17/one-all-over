@@ -1,0 +1,5 @@
+name = "one-all-over"
+compatibility_date = "2025-06-13"
+
+[assets]
+directory = "./dist"
