@@ -13,6 +13,7 @@
 ;      │     7     │     8     │     9     │           │
 ;      │  snap     │  snap     │  snap     │   Enter   │
 ;      │  LEFT ⅓   │ CENTRE ⅓  │  RIGHT ⅓  │ max toggle│
+;      │           │^Muscle Mem│           │           │
 ;      ├───────────┼───────────┼───────────┤           │
 ;      │     4     │     5     │     6     │           │
 ;      │  Notion   │  Claude   │  Claude   │           │
@@ -49,7 +50,8 @@ global gURLs := Map(
     "apollo"  , "https://app.apollo.io",
     "github"  , "https://github.com",
     "claude"  , "https://claude.ai",
-    "scienza" , "https://8b9bf0b3.bubbles-elr.pages.dev/"
+    "scienza"       , "https://8b9bf0b3.bubbles-elr.pages.dev/",
+    "muscle-memory" , "https://one-all-over.dannytomlinson17.workers.dev/"
 )
 
 ; Desktop app heroes
@@ -80,10 +82,11 @@ NumpadSub::  OpenURL("apollo")
 NumpadAdd::   MoveToNextMonitor()
 NumpadEnter:: ToggleMax()
 
-; --- top row: snap ---
-Numpad7:: SnapActive("L")
-Numpad8:: SnapActive("C")
-Numpad9:: SnapActive("R")
+; --- top row: snap + Ctrl+8 opens Muscle Memory ---
+Numpad7::  SnapActive("L")
+Numpad8::  SnapActive("C")
+Numpad9::  SnapActive("R")
+^Numpad8:: OpenURL("muscle-memory")
 
 ; --- middle row: focus apps ---
 Numpad4:: FocusApp("notion")
