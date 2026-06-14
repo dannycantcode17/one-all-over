@@ -39,6 +39,15 @@ const SEED_SHORTCUTS = [
 
   // ---- iPhone ----
   { id: 26, keys: ["Action button"], action: "New Granola note recording", tool: "iPhone", notes: "Shortcuts automation" },
+
+  // ---- Chrome extensions ----
+  { id: 27, keys: ["Ctrl", "Page Up"],          action: "1Password: open popup",       tool: "Chrome", notes: "" },
+  { id: 28, keys: ["Ctrl", "Page Down"],         action: "1Password: lock vault",       tool: "Chrome", notes: "" },
+  { id: 29, keys: ["Ctrl", "Shift", "A"],        action: "Apollo: open extension",      tool: "Chrome", notes: "" },
+  { id: 30, keys: ["Ctrl", "Shift", "F"],        action: "Bookmark Favicon Changer",    tool: "Chrome", notes: "" },
+  { id: 31, keys: ["Ctrl", "Shift", "C"],        action: "Claude: open extension",      tool: "Chrome", notes: "" },
+  { id: 32, keys: ["Ctrl", "Shift", "Space"],    action: "Scribe: start capture",       tool: "Chrome", notes: "" },
+  { id: 33, keys: ["Ctrl", "Shift", "T"],        action: "Text Blaze: open templates",  tool: "Chrome", notes: "" },
 ];
 
 const TOOL_COLOURS = {
